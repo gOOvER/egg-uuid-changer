@@ -1,0 +1,55 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create plugin ZIP
+        run: |
+          # Create a temporary directory for the plugin
+          mkdir -p build/egg-uuid-changer
+          
+          # Copy all files except .git, .github, and build directory
+          rsync -av --exclude='.git' --exclude='.github' --exclude='build' . build/egg-uuid-changer/
+          
+          # Create the ZIP file
+          cd build
+          zip -r ../egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip egg-uuid-changer
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
+          body: |
+            ## Installation
+            
+            Download the ZIP file below and import it via:
+            **Admin Area → Plugins → Import**
+            
+            Or install manually:
+            ```bash
+            cd /var/www/pelican/plugins
+            wget https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
+            unzip egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
+            cd /var/www/pelican
+            php artisan plugin:enable egg-uuid-changer
+            php artisan optimize:clear
+            ```
+            
+            ## Changelog
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md) for details.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

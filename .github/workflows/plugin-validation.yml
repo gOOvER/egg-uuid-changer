@@ -1,0 +1,109 @@
+name: Plugin Validation
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate required files
+        run: |
+          echo "Checking for required files..."
+          
+          REQUIRED_FILES=(
+            "plugin.json"
+            "README.md"
+            "LICENSE.md"
+            "CHANGELOG.md"
+          )
+          
+          MISSING_FILES=()
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              MISSING_FILES+=("$file")
+              echo "❌ Missing: $file"
+            else
+              echo "✅ Found: $file"
+            fi
+          done
+          
+          if [ ${#MISSING_FILES[@]} -ne 0 ]; then
+            echo ""
+            echo "Error: Missing required files!"
+            exit 1
+          fi
+
+      - name: Validate plugin.json structure
+        run: |
+          echo "Validating plugin.json structure..."
+          
+          php -r '
+          $json = json_decode(file_get_contents("plugin.json"), true);
+          
+          $required_fields = ["id", "name", "author", "version", "description", "class", "namespace"];
+          $missing = [];
+          
+          foreach ($required_fields as $field) {
+            if (!isset($json[$field])) {
+              $missing[] = $field;
+            }
+          }
+          
+          if (!empty($missing)) {
+            echo "Missing required fields in plugin.json: " . implode(", ", $missing) . "\n";
+            exit(1);
+          }
+          
+          echo "plugin.json structure is valid\n";
+          echo "Plugin: " . $json["name"] . " v" . $json["version"] . "\n";
+          '
+
+      - name: Check version consistency
+        run: |
+          echo "Checking version consistency..."
+          
+          PLUGIN_VERSION=$(php -r 'echo json_decode(file_get_contents("plugin.json"))->version;')
+          echo "plugin.json version: $PLUGIN_VERSION"
+          
+          if grep -q "\[${PLUGIN_VERSION}\]" CHANGELOG.md; then
+            echo "✅ Version $PLUGIN_VERSION found in CHANGELOG.md"
+          else
+            echo "⚠️  Warning: Version $PLUGIN_VERSION not found in CHANGELOG.md"
+          fi
+
+      - name: Validate namespace and class
+        run: |
+          echo "Validating namespace and class..."
+          
+          NAMESPACE=$(php -r 'echo json_decode(file_get_contents("plugin.json"))->namespace;')
+          CLASS=$(php -r 'echo json_decode(file_get_contents("plugin.json"))->class;')
+          
+          echo "Expected namespace: $NAMESPACE"
+          echo "Expected class: $CLASS"
+          
+          # Find the main plugin class file
+          CLASS_FILE=$(find src -name "${CLASS}.php" | head -n 1)
+          
+          if [ -z "$CLASS_FILE" ]; then
+            echo "❌ Class file not found: ${CLASS}.php"
+            exit 1
+          fi
+          
+          echo "✅ Found class file: $CLASS_FILE"
+          
+          # Check if namespace matches
+          if grep -q "namespace $NAMESPACE;" "$CLASS_FILE"; then
+            echo "✅ Namespace matches in class file"
+          else
+            echo "❌ Namespace mismatch in class file"
+            exit 1
+          fi

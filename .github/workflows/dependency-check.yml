@@ -1,0 +1,59 @@
+name: Dependency Check
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  schedule:
+    # Run weekly on Monday at 9:00 UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Check for composer.json
+        id: check_composer
+        run: |
+          if [ -f "composer.json" ]; then
+            echo "has_composer=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_composer=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        if: steps.check_composer.outputs.has_composer == 'true'
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Check for known security vulnerabilities
+        if: steps.check_composer.outputs.has_composer == 'true'
+        run: |
+          composer audit || echo "No composer.lock found or no vulnerabilities detected"
+
+      - name: Check PHP version compatibility
+        run: |
+          echo "Checking PHP version requirements..."
+          
+          if [ -f "plugin.json" ]; then
+            MIN_PHP=$(php -r 'echo json_decode(file_get_contents("plugin.json"))->require->php ?? "Not specified";')
+            echo "Minimum PHP version required: $MIN_PHP"
+          fi
+          
+          echo "Current PHP version: $(php -v | head -n 1)"
+
+      - name: Report outdated packages
+        if: steps.check_composer.outputs.has_composer == 'true'
+        run: |
+          composer outdated --direct || true
+        continue-on-error: true

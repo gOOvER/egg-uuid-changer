@@ -1,0 +1,40 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  code-style:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: php-cs-fixer
+          coverage: none
+
+      - name: Check code style
+        run: |
+          php-cs-fixer fix --dry-run --diff --verbose --config=.php-cs-fixer.php || true
+        continue-on-error: true
+
+      - name: Check file permissions
+        run: |
+          echo "Checking for executable PHP files (should not be executable)..."
+          find . -type f -name "*.php" -executable ! -path "./vendor/*" || true
+          
+      - name: Check for common issues
+        run: |
+          echo "Checking for var_dump, dd, dump calls..."
+          grep -rn "var_dump\|dd(\|dump(" --include="*.php" --exclude-dir=vendor . || echo "No debug calls found."
+          
+          echo "Checking for TODO/FIXME comments..."
+          grep -rn "TODO\|FIXME" --include="*.php" --exclude-dir=vendor . || echo "No TODO/FIXME found."
