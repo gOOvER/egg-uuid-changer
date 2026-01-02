@@ -24,6 +24,10 @@ return [
         'change_uuid_helper' => 'Enable this option to automatically generate a new UUID after import or enter your own.',
     ],
     
+    'import_prompt_label' => 'Change Imported UUID?',
+    'import_modal_heading' => 'Change UUID for Imported Egg',
+    'import_modal_description' => 'The egg ":name" has just been imported. Would you like to change its UUID now?',
+    
     'form' => [
         'new_uuid_label' => 'New UUID',
         'new_uuid_placeholder' => 'Leave empty for automatic generation',

@@ -26,6 +26,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Prompt on Import
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, after importing an egg, a prominent button will appear
+    | on the egg edit page prompting to change the imported UUID.
+    |
+    */
+
+    'prompt_on_import' => env('EGG_UUID_CHANGER_PROMPT_ON_IMPORT', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Validation
     |--------------------------------------------------------------------------
     |

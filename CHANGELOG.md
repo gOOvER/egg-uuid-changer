@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UUID change functionality for eggs
 - Automatic UUID generation option
 - Optional auto-prompt on save feature
+- Optional prompt after import feature (shows warning button on edit page)
 - Duplicate UUID validation
 - Transaction-safe database operations
 - English and German translations
