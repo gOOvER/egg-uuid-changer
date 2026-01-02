@@ -1,6 +1,6 @@
 <?php
 
-namespace GOOvER\EggUuidChanger;
+namespace goover\EggUuidChanger;
 
 use App\Enums\HeaderActionPosition;
 use App\Filament\Admin\Resources\Eggs\Pages\EditEgg;

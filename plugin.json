@@ -5,6 +5,6 @@
     "version": "1.0.0",
     "description": "A plugin that allows changing the UUID of Eggs in Pelican Panel",
     "category": "plugin",
-    "namespace": "GOOvER\\EggUuidChanger",
+    "namespace": "goover\\EggUuidChanger",
     "class": "EggUuidChangerPlugin"
 }
