@@ -100,18 +100,13 @@ jobs:
           
           echo "✅ Found class file: $CLASS_FILE"
           
-          # Check if namespace matches
-          if grep -q "namespace ${NAMESPACE};" "$CLASS_FILE"; then
+          # Check if namespace exists in file (using grep -F for fixed string matching)
+          if grep -F "namespace ${NAMESPACE};" "$CLASS_FILE" > /dev/null 2>&1; then
             echo "✅ Namespace matches in class file"
           else
-            echo "⚠️  Checking for namespace without semicolon..."
-            if grep -q "namespace ${NAMESPACE}" "$CLASS_FILE"; then
-              echo "✅ Namespace found (without semicolon check)"
-            else
-              echo "❌ Namespace mismatch in class file"
-              echo "Expected: namespace ${NAMESPACE};"
-              echo "Found in file:"
-              grep "namespace" "$CLASS_FILE" || echo "No namespace declaration found"
-              exit 1
-            fi
+            echo "❌ Namespace mismatch in class file"
+            echo "Expected: namespace ${NAMESPACE};"
+            echo "Found in file:"
+            grep "namespace" "$CLASS_FILE" || echo "No namespace declaration found"
+            exit 1
           fi
