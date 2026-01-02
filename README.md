@@ -45,20 +45,6 @@ When enabled, clicking the save button will show a dialog asking if you want to 
 - Or enter a specific UUID
 - Uncheck the box to save without changing the UUID
 
-### Auto-Prompt on Import (Optional)
-
-You can also enable a feature that prompts you to change the UUID after importing an egg. To enable this, add to your `.env`:
-
-```env
-EGG_UUID_CHANGER_AUTO_PROMPT_ON_IMPORT=true
-```
-
-When enabled, after successfully importing an egg, you'll see a notification with two options:
-- **Change UUID**: Opens the egg edit page where you can use the "Change UUID" button
-- **Keep UUID**: Dismisses the notification and keeps the imported UUID
-
-This way you can decide right after import whether the UUID should be changed without having to manually navigate to the egg.
-
 The page won't reload automatically after changing the UUID. Just refresh manually or switch pages to see the updated value.
 
 ## Configuration
@@ -68,7 +54,6 @@ You can add these to your `.env` if needed:
 ```env
 EGG_UUID_CHANGER_ENABLED=true
 EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE=false
-EGG_UUID_CHANGER_AUTO_PROMPT_ON_IMPORT=false
 EGG_UUID_CHANGER_ALLOW_DUPLICATE=false
 EGG_UUID_CHANGER_REQUIRE_CONFIRMATION=true
 ```
