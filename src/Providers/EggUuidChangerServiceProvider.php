@@ -1,6 +1,6 @@
 <?php
 
-namespace EggUuidChanger\Providers;
+namespace GOOvER\EggUuidChanger\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
