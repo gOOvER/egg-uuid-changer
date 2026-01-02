@@ -1,3 +1,4 @@
+[![Pelican Panel](https://img.shields.io/badge/Pelican_Panel-Plugin-0e7490?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTEyIDJhMTAgMTAgMCAxIDAgMTAgMTBBMTAgMTAgMCAwIDAgMTIgMnoiLz48L3N2Zz4=)](https://pelican.dev)
 [![GitHub Release](https://img.shields.io/github/v/release/gOOvER/egg-uuid-changer?style=flat-square&logo=github)](https://github.com/gOOvER/egg-uuid-changer/releases)
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=flat-square&logo=php)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/gOOvER/egg-uuid-changer?style=flat-square)](LICENSE.md)
