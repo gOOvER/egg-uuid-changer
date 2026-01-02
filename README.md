@@ -1,5 +1,4 @@
 [![GitHub Release](https://img.shields.io/github/v/release/gOOvER/egg-uuid-changer?style=flat-square&logo=github)](https://github.com/gOOvER/egg-uuid-changer/releases)
-[![GitHub Downloads](https://img.shields.io/github/downloads/gOOvER/egg-uuid-changer/total?style=flat-square&logo=github)](https://github.com/gOOvER/egg-uuid-changer/releases)
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=flat-square&logo=php)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/gOOvER/egg-uuid-changer?style=flat-square)](LICENSE.md)
 [![Discord](https://img.shields.io/discord/1158000498952126464?style=flat-square&logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.com/invite/RmqSeYBQ4y)
