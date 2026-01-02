@@ -67,17 +67,25 @@ class EggUuidChangerPlugin implements Plugin
     protected static function registerImportEventListener(): void
     {
         Egg::created(function (Egg $egg) {
-            // Check if we should change UUID after import
-            if (session()->has('egg_import_change_uuid') && session()->get('egg_import_change_uuid')) {
-                $newUuid = session()->get('egg_import_new_uuid');
-                session()->forget(['egg_import_change_uuid', 'egg_import_new_uuid']);
-                
-                // Delay the UUID change slightly to ensure the import is complete
-                dispatch(function () use ($egg, $newUuid) {
-                    $egg->refresh();
-                    static::changeUuid($egg, $newUuid, true);
-                })->afterResponse();
-            }
+            // Only trigger for imports by checking if egg was just created with import data
+            // We'll show a notification prompting user to change UUID
+            Notification::make()
+                ->title(trans('egg-uuid-changer::messages.notifications.import_detected_title'))
+                ->body(trans('egg-uuid-changer::messages.notifications.import_detected_body'))
+                ->info()
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('change_uuid')
+                        ->label(trans('egg-uuid-changer::messages.notifications.change_uuid_action'))
+                        ->button()
+                        ->url(fn () => route('filament.admin.resources.eggs.edit', ['record' => $egg->id]))
+                        ->markAsRead(),
+                    \Filament\Notifications\Actions\Action::make('keep_uuid')
+                        ->label(trans('egg-uuid-changer::messages.notifications.keep_uuid_action'))
+                        ->color('gray')
+                        ->close(),
+                ])
+                ->persistent()
+                ->send();
         });
     }
 
