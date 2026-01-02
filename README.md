@@ -6,7 +6,9 @@
 
 [![Syntax Check](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/syntax-check.yml?branch=master&style=flat-square&label=Syntax%20Check&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/syntax-check.yml)
 [![Plugin Validation](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/plugin-validation.yml?branch=master&style=flat-square&label=Validation&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/plugin-validation.yml)
-[![Code Quality](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/code-quality.yml?branch=master&style=flat-square&label=Code%20Quality&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/code-quality.yml)# Egg UUID Changer
+[![Code Quality](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/code-quality.yml?branch=master&style=flat-square&label=Code%20Quality&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/code-quality.yml)
+
+# Egg UUID Changer
 
 Changes the UUID of existing eggs in Pelican Panel. That's it.
 
