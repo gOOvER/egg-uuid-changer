@@ -308,3 +308,4 @@ class EggUuidChangerPlugin implements Plugin
                 ->send();
         }
     }
+}
