@@ -108,6 +108,9 @@ class EggUuidChangerPlugin implements Plugin
             ])
             ->action(function (array $data, Egg $record) {
                 static::changeUuid($record, $data['new_uuid'] ?? null);
+            })
+            ->after(function ($livewire) {
+                $livewire->dispatch('refresh');
             });
     }
 
