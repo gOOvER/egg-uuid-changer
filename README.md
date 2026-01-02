@@ -2,6 +2,7 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=flat-square&logo=php)](https://www.php.net/)
 [![License](https://img.shields.io/github/license/gOOvER/egg-uuid-changer?style=flat-square)](LICENSE.md)
 [![Discord](https://img.shields.io/discord/1158000498952126464?style=flat-square&logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.com/invite/RmqSeYBQ4y)
+[![Donate](https://img.shields.io/badge/Donate-❤_Support-ff69b4?style=flat-square)](https://donate.goover.dev)
 
 [![Syntax Check](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/syntax-check.yml?branch=master&style=flat-square&label=Syntax%20Check&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/syntax-check.yml)
 [![Plugin Validation](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/plugin-validation.yml?branch=master&style=flat-square&label=Validation&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/plugin-validation.yml)
