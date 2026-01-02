@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release
-- UUID change functionality for eggs via button on edit page
+- UUID change functionality via button on egg edit page
+- Display current UUID in dialog for easy copying
 - Automatic UUID generation option
-- Optional additional "Change UUID on Save?" button (via EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE)
 - Duplicate UUID validation
 - Transaction-safe database operations
 - English and German translations

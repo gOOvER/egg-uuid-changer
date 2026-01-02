@@ -38,14 +38,6 @@ class EggUuidChangerPlugin implements Plugin
             static::getChangeUuidActionStatic()
         );
 
-        // Hook into save if auto-prompt is enabled
-        if (config('egg-uuid-changer.auto_prompt_on_save', false)) {
-            EditEgg::registerCustomHeaderActions(
-                HeaderActionPosition::After,
-                static::getPromptUuidChangeOnSave()
-            );
-        }
-
         static::$registered = true;
     }
 
@@ -79,7 +71,15 @@ class EggUuidChangerPlugin implements Plugin
             ->modalDescription(trans('egg-uuid-changer::messages.modal_description'))
             ->modalIcon('tabler-alert-triangle')
             ->modalIconColor('warning')
+            ->fillForm(fn (Egg $record): array => [
+                'current_uuid' => $record->uuid,
+            ])
             ->form([
+                TextInput::make('current_uuid')
+                    ->label(trans('egg-uuid-changer::messages.form.current_uuid_label'))
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->helperText(trans('egg-uuid-changer::messages.form.current_uuid_helper')),
                 TextInput::make('new_uuid')
                     ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
                     ->placeholder(trans('egg-uuid-changer::messages.form.new_uuid_placeholder'))
@@ -98,50 +98,6 @@ class EggUuidChangerPlugin implements Plugin
                                 }
 
                                 // Check if UUID already exists
-                                if (Egg::where('uuid', $value)->exists()) {
-                                    $fail(trans('egg-uuid-changer::messages.validation.duplicate_uuid'));
-                                }
-                            };
-                        },
-                    ]),
-            ])
-            ->action(function (array $data, Egg $record) {
-                static::changeUuid($record, $data['new_uuid'] ?? null);
-            });
-    }
-
-    /**
-     * Create the action to prompt UUID change when saving
-     */
-    protected static function getPromptUuidChangeOnSave(): Action
-    {
-        return Action::make('change_uuid_on_save')
-            ->label(trans('egg-uuid-changer::messages.save_button_label'))
-            ->icon('tabler-refresh')
-            ->color('warning')
-            ->iconSize(IconSize::Large)
-            ->requiresConfirmation()
-            ->modalHeading(trans('egg-uuid-changer::messages.save_modal_heading'))
-            ->modalDescription(trans('egg-uuid-changer::messages.save_modal_description'))
-            ->modalIcon('tabler-alert-triangle')
-            ->modalIconColor('warning')
-            ->form([
-                TextInput::make('new_uuid')
-                    ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
-                    ->placeholder(trans('egg-uuid-changer::messages.form.new_uuid_placeholder'))
-                    ->helperText(trans('egg-uuid-changer::messages.form.new_uuid_helper'))
-                    ->maxLength(36)
-                    ->rules([
-                        function () {
-                            return function (string $attribute, $value, \Closure $fail) {
-                                if (empty($value)) {
-                                    return;
-                                }
-
-                                if (!Uuid::isValid($value)) {
-                                    $fail(trans('egg-uuid-changer::messages.validation.invalid_uuid'));
-                                }
-
                                 if (Egg::where('uuid', $value)->exists()) {
                                     $fail(trans('egg-uuid-changer::messages.validation.duplicate_uuid'));
                                 }

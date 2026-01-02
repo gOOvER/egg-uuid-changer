@@ -14,18 +14,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Auto Prompt on Save
-    |--------------------------------------------------------------------------
-    |
-    | When enabled, the plugin will prompt the user to change the UUID
-    | every time they save an egg.
-    |
-    */
-
-    'auto_prompt_on_save' => env('EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE', false),
-
-    /*
-    |--------------------------------------------------------------------------
     | Validation
     |--------------------------------------------------------------------------
     |

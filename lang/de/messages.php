@@ -29,6 +29,8 @@ return [
     'import_modal_description' => 'Das Egg ":name" wurde gerade importiert. Möchten Sie die UUID jetzt ändern?',
     
     'form' => [
+        'current_uuid_label' => 'Aktuelle UUID',
+        'current_uuid_helper' => 'Die aktuelle UUID dieses Eggs (kopieren Sie diese, falls Sie sie später benötigen)',
         'new_uuid_label' => 'Neue UUID',
         'new_uuid_placeholder' => 'Leer lassen für automatische Generierung',
         'new_uuid_helper' => 'Geben Sie eine gültige UUID ein oder lassen Sie das Feld leer, um eine neue UUID zu generieren.',
