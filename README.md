@@ -21,7 +21,7 @@ The plugin hooks into Filament's action system to add a button on the EditEgg pa
 
 ```bash
 cd /var/www/pelican/plugins
-git clone <repo> egg-uuid-changer
+git clone https://github.com/gOOvER/egg-uuid-changer.git egg-uuid-changer
 cd /var/www/pelican
 php artisan plugin:enable egg-uuid-changer
 php artisan optimize:clear
@@ -34,7 +34,7 @@ Open any egg in the admin panel. You'll see a "Change UUID" button at the top. C
 - Enter a new UUID or leave blank to generate one automatically
 - Confirm and the UUID will be updated immediately
 
-The page won't reload automatically after changing the UUID. Just refresh manually or switch pages to see the updated value.
+The page will automatically reload after the UUID change to show the updated value.
 
 ## Configuration
 
