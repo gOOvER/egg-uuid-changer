@@ -4,6 +4,7 @@ namespace EggUuidChanger;
 
 use App\Enums\HeaderActionPosition;
 use App\Filament\Admin\Resources\Eggs\Pages\EditEgg;
+use App\Filament\Admin\Resources\Eggs\Pages\CreateEgg;
 use App\Models\Egg;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
@@ -44,12 +45,108 @@ class EggUuidChangerPlugin implements Plugin
             static::registerSaveHook();
         }
 
+        // Hook into the import action if auto-prompt is enabled
+        if (config('egg-uuid-changer.auto_prompt_on_import', false)) {
+            static::registerImportButtonHook();
+        }
+
         static::$registered = true;
     }
 
     public function boot(Panel $panel): void
     {
-        //
+        // Hook into egg creation events for import UUID changes
+        if (config('egg-uuid-changer.auto_prompt_on_import', false)) {
+            static::registerImportEventListener();
+        }
+    }
+
+    /**
+     * Register event listener for egg imports
+     */
+    protected static function registerImportEventListener(): void
+    {
+        Egg::created(function (Egg $egg) {
+            // Check if we should change UUID after import
+            if (session()->has('egg_import_change_uuid') && session()->get('egg_import_change_uuid')) {
+                $newUuid = session()->get('egg_import_new_uuid');
+                session()->forget(['egg_import_change_uuid', 'egg_import_new_uuid']);
+                
+                // Delay the UUID change slightly to ensure the import is complete
+                dispatch(function () use ($egg, $newUuid) {
+                    $egg->refresh();
+                    static::changeUuid($egg, $newUuid, true);
+                })->afterResponse();
+            }
+        });
+    }
+
+    /**
+     * Register hook to show UUID change option on import page
+     */
+    protected static function registerImportButtonHook(): void
+    {
+        CreateEgg::registerCustomHeaderActions(
+            HeaderActionPosition::After,
+            static::getImportUuidChangeAction()
+        );
+    }
+
+    /**
+     * Create the action for UUID change during import
+     */
+    protected static function getImportUuidChangeAction(): Action
+    {
+        return Action::make('import_with_uuid_change')
+            ->label(trans('egg-uuid-changer::messages.import_button_label'))
+            ->icon('tabler-file-import')
+            ->color('primary')
+            ->requiresConfirmation()
+            ->modalHeading(trans('egg-uuid-changer::messages.import_modal_heading'))
+            ->modalDescription(trans('egg-uuid-changer::messages.import_modal_description'))
+            ->form([
+                Checkbox::make('change_uuid')
+                    ->label(trans('egg-uuid-changer::messages.import_form.change_uuid_label'))
+                    ->helperText(trans('egg-uuid-changer::messages.import_form.change_uuid_helper'))
+                    ->default(false),
+                TextInput::make('new_uuid')
+                    ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
+                    ->placeholder(trans('egg-uuid-changer::messages.form.new_uuid_placeholder'))
+                    ->helperText(trans('egg-uuid-changer::messages.form.new_uuid_helper'))
+                    ->maxLength(36)
+                    ->visible(fn (\Filament\Forms\Get $get) => $get('change_uuid'))
+                    ->rules([
+                        function () {
+                            return function (string $attribute, $value, \Closure $fail) {
+                                if (empty($value)) {
+                                    return;
+                                }
+
+                                if (!Uuid::isValid($value)) {
+                                    $fail(trans('egg-uuid-changer::messages.validation.invalid_uuid'));
+                                }
+
+                                if (Egg::where('uuid', $value)->exists()) {
+                                    $fail(trans('egg-uuid-changer::messages.validation.duplicate_uuid'));
+                                }
+                            };
+                        },
+                    ]),
+            ])
+            ->action(function (array $data, Component $livewire) {
+                // Store UUID change preference in session for after import
+                if ($data['change_uuid'] ?? false) {
+                    session()->put('egg_import_change_uuid', true);
+                    session()->put('egg_import_new_uuid', $data['new_uuid'] ?? null);
+                    
+                    Notification::make()
+                        ->title(trans('egg-uuid-changer::messages.notifications.import_ready_title'))
+                        ->body(trans('egg-uuid-changer::messages.notifications.import_ready_body'))
+                        ->info()
+                        ->send();
+                }
+            })
+            ->visible(fn () => request()->routeIs('filament.admin.resources.eggs.create'));
     }
 
     public static function make(): static
@@ -179,7 +276,7 @@ class EggUuidChangerPlugin implements Plugin
     /**
      * Change the UUID of an egg
      */
-    protected static function changeUuid(Egg $record, ?string $newUuid = null): void
+    protected static function changeUuid(Egg $record, ?string $newUuid = null, bool $isImport = false): void
     {
         $oldUuid = $record->uuid;
         $newUuid = !empty($newUuid) ? $newUuid : Str::uuid()->toString();
@@ -193,9 +290,12 @@ class EggUuidChangerPlugin implements Plugin
 
             DB::commit();
 
+            $titleKey = $isImport ? 'notifications.import_success_title' : 'notifications.success_title';
+            $bodyKey = $isImport ? 'notifications.import_success_body' : 'notifications.success_body';
+
             Notification::make()
-                ->title(trans('egg-uuid-changer::messages.notifications.success_title'))
-                ->body(trans('egg-uuid-changer::messages.notifications.success_body', ['old' => $oldUuid, 'new' => $newUuid]))
+                ->title(trans('egg-uuid-changer::messages.' . $titleKey))
+                ->body(trans('egg-uuid-changer::messages.' . $bodyKey, ['old' => $oldUuid, 'new' => $newUuid]))
                 ->success()
                 ->send();
         } catch (\Exception $e) {
@@ -207,3 +307,4 @@ class EggUuidChangerPlugin implements Plugin
                 ->danger()
                 ->send();
         }
+    }

@@ -26,6 +26,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Auto Prompt on Import
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the plugin will show an action button on the import page
+    | allowing the user to change the UUID before or after importing an egg.
+    |
+    */
+
+    'auto_prompt_on_import' => env('EGG_UUID_CHANGER_AUTO_PROMPT_ON_IMPORT', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Validation
     |--------------------------------------------------------------------------
     |

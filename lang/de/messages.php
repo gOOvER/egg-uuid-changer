@@ -15,6 +15,15 @@ return [
         'change_uuid_helper' => 'Aktivieren Sie diese Option, um automatisch eine neue UUID zu generieren oder eine eigene einzugeben.',
     ],
     
+    'import_button_label' => 'Mit UUID-Änderung importieren',
+    'import_modal_heading' => 'Egg importieren',
+    'import_modal_description' => 'Möchten Sie die UUID des importierten Eggs ändern?',
+    
+    'import_form' => [
+        'change_uuid_label' => 'UUID nach Import ändern',
+        'change_uuid_helper' => 'Aktivieren Sie diese Option, um nach dem Import automatisch eine neue UUID zu generieren oder eine eigene einzugeben.',
+    ],
+    
     'form' => [
         'new_uuid_label' => 'Neue UUID',
         'new_uuid_placeholder' => 'Leer lassen für automatische Generierung',
@@ -30,6 +39,10 @@ return [
         'success_title' => 'UUID erfolgreich geändert',
         'success_body' => 'Die UUID wurde von :old zu :new geändert.',
         'save_success_title' => 'Egg erfolgreich gespeichert',
+        'import_success_title' => 'Egg erfolgreich importiert und UUID geändert',
+        'import_success_body' => 'Das Egg wurde importiert und die UUID wurde von :old zu :new geändert.',
+        'import_ready_title' => 'UUID-Änderung vorbereitet',
+        'import_ready_body' => 'Die UUID wird nach dem Import automatisch geändert.',
         'error_title' => 'Fehler beim Ändern der UUID',
     ],
 ];
