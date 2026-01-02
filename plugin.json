@@ -1,0 +1,10 @@
+{
+    "id": "egg-uuid-changer",
+    "name": "Egg UUID Changer",
+    "author": "gOOvER",
+    "version": "1.0.0",
+    "description": "A plugin that allows changing the UUID of Eggs in Pelican Panel",
+    "category": "plugin",
+    "namespace": "EggUuidChanger",
+    "class": "EggUuidChangerPlugin"
+}
