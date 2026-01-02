@@ -9,14 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release
-- UUID change functionality for eggs
+- UUID change functionality for eggs via button on edit page
 - Automatic UUID generation option
-- Optional auto-prompt on save feature
+- Optional additional "Change UUID on Save?" button (via EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE)
 - Duplicate UUID validation
 - Transaction-safe database operations
 - English and German translations
 - Configuration options via .env
-- Custom save button that prompts for UUID change (when enabled)
 
 ### Notes
 - Import-time UUID prompt was attempted but removed due to technical limitations with Pelican Panel's import system

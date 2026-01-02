@@ -15,8 +15,6 @@ use Filament\Support\Enums\IconSize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
-use Filament\Forms\Components\Checkbox;
-use Livewire\Component;
 
 class EggUuidChangerPlugin implements Plugin
 {
@@ -40,9 +38,12 @@ class EggUuidChangerPlugin implements Plugin
             static::getChangeUuidActionStatic()
         );
 
-        // Hook into the save action if auto-prompt is enabled
+        // Hook into save if auto-prompt is enabled
         if (config('egg-uuid-changer.auto_prompt_on_save', false)) {
-            static::registerSaveHook();
+            EditEgg::registerCustomHeaderActions(
+                HeaderActionPosition::After,
+                static::getPromptUuidChangeOnSave()
+            );
         }
 
         static::$registered = true;
@@ -110,38 +111,26 @@ class EggUuidChangerPlugin implements Plugin
     }
 
     /**
-     * Register hook to prompt UUID change on save
-     */
-    protected static function registerSaveHook(): void
-    {
-        EditEgg::registerCustomFormActions(
-            static::getPromptUuidChangeOnSave()
-        );
-    }
-
-    /**
      * Create the action to prompt UUID change when saving
      */
     protected static function getPromptUuidChangeOnSave(): Action
     {
-        return Action::make('save_with_uuid_prompt')
+        return Action::make('change_uuid_on_save')
             ->label(trans('egg-uuid-changer::messages.save_button_label'))
-            ->icon('tabler-device-floppy')
-            ->color('success')
+            ->icon('tabler-refresh')
+            ->color('warning')
+            ->iconSize(IconSize::Large)
             ->requiresConfirmation()
             ->modalHeading(trans('egg-uuid-changer::messages.save_modal_heading'))
             ->modalDescription(trans('egg-uuid-changer::messages.save_modal_description'))
+            ->modalIcon('tabler-alert-triangle')
+            ->modalIconColor('warning')
             ->form([
-                Checkbox::make('change_uuid')
-                    ->label(trans('egg-uuid-changer::messages.save_form.change_uuid_label'))
-                    ->helperText(trans('egg-uuid-changer::messages.save_form.change_uuid_helper'))
-                    ->default(false),
                 TextInput::make('new_uuid')
                     ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
                     ->placeholder(trans('egg-uuid-changer::messages.form.new_uuid_placeholder'))
                     ->helperText(trans('egg-uuid-changer::messages.form.new_uuid_helper'))
                     ->maxLength(36)
-                    ->visible(fn (\Filament\Forms\Get $get) => $get('change_uuid'))
                     ->rules([
                         function () {
                             return function (string $attribute, $value, \Closure $fail) {
@@ -160,20 +149,8 @@ class EggUuidChangerPlugin implements Plugin
                         },
                     ]),
             ])
-            ->action(function (array $data, Egg $record, Component $livewire) {
-                // Save the egg first
-                $livewire->form->getState();
-                $record->save();
-
-                // Then change UUID if requested
-                if ($data['change_uuid'] ?? false) {
-                    static::changeUuid($record, $data['new_uuid'] ?? null);
-                } else {
-                    Notification::make()
-                        ->title(trans('egg-uuid-changer::messages.notifications.save_success_title'))
-                        ->success()
-                        ->send();
-                }
+            ->action(function (array $data, Egg $record) {
+                static::changeUuid($record, $data['new_uuid'] ?? null);
             });
     }
 
