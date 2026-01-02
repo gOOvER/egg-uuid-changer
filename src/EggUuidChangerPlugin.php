@@ -79,6 +79,7 @@ class EggUuidChangerPlugin implements Plugin
                     ->label(trans('egg-uuid-changer::messages.form.current_uuid_label'))
                     ->disabled()
                     ->dehydrated(false)
+                    ->copyable()
                     ->helperText(trans('egg-uuid-changer::messages.form.current_uuid_helper')),
                 TextInput::make('new_uuid')
                     ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
