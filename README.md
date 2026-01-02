@@ -1,5 +1,14 @@
 # Egg UUID Changer
 
+[![GitHub Release](https://img.shields.io/github/v/release/gOOvER/egg-uuid-changer?style=for-the-badge&logo=github)](https://github.com/gOOvER/egg-uuid-changer/releases)
+[![GitHub Downloads](https://img.shields.io/github/downloads/gOOvER/egg-uuid-changer/total?style=for-the-badge&logo=github)](https://github.com/gOOvER/egg-uuid-changer/releases)
+[![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php)](https://www.php.net/)
+[![License](https://img.shields.io/github/license/gOOvER/egg-uuid-changer?style=for-the-badge)](LICENSE.md)
+
+[![Syntax Check](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/syntax-check.yml?branch=master&style=for-the-badge&label=Syntax%20Check&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/syntax-check.yml)
+[![Plugin Validation](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/plugin-validation.yml?branch=master&style=for-the-badge&label=Validation&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/plugin-validation.yml)
+[![Code Quality](https://img.shields.io/github/actions/workflow/status/gOOvER/egg-uuid-changer/code-quality.yml?branch=master&style=for-the-badge&label=Code%20Quality&logo=github-actions)](https://github.com/gOOvER/egg-uuid-changer/actions/workflows/code-quality.yml)
+
 Changes the UUID of existing eggs in Pelican Panel. That's it.
 
 ## Why would you need this?
