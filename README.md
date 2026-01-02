@@ -31,6 +31,20 @@ php artisan optimize:clear
 
 Open any egg in the admin panel. You'll see a "Change UUID" button at the top. Click it, enter a new UUID (or leave blank to generate one), confirm, and save.
 
+### Auto-Prompt on Save (Optional)
+
+You can enable an optional feature that prompts you to change the UUID every time you save an egg. To enable this, add to your `.env`:
+
+```env
+EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE=true
+```
+
+When enabled, clicking the save button will show a dialog asking if you want to change the UUID. You can:
+- Check the box to enable UUID change
+- Leave the new UUID field empty to auto-generate
+- Or enter a specific UUID
+- Uncheck the box to save without changing the UUID
+
 The page won't reload automatically after changing the UUID. Just refresh manually or switch pages to see the updated value.
 
 ## Configuration
@@ -39,6 +53,7 @@ You can add these to your `.env` if needed:
 
 ```env
 EGG_UUID_CHANGER_ENABLED=true
+EGG_UUID_CHANGER_AUTO_PROMPT_ON_SAVE=false
 EGG_UUID_CHANGER_ALLOW_DUPLICATE=false
 EGG_UUID_CHANGER_REQUIRE_CONFIRMATION=true
 ```
