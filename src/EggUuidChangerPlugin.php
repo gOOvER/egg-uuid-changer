@@ -45,27 +45,12 @@ class EggUuidChangerPlugin implements Plugin
             static::registerSaveHook();
         }
 
-        // Register import prompt on EditEgg page if enabled
-        if (config('egg-uuid-changer.prompt_on_import', false)) {
-            static::registerImportPrompt();
-        }
-
         static::$registered = true;
     }
 
     public function boot(Panel $panel): void
     {
-        // Hook into egg creation for import UUID changes
-        if (config('egg-uuid-changer.prompt_on_import', false)) {
-            Egg::created(function (Egg $egg) {
-                // Store egg ID in session to show prompt on next page
-                session()->flash('egg_import_prompt', [
-                    'id' => $egg->id,
-                    'name' => $egg->name,
-                    'uuid' => $egg->uuid,
-                ]);
-            });
-        }
+        //
     }
 
     public static function make(): static
@@ -132,64 +117,6 @@ class EggUuidChangerPlugin implements Plugin
         EditEgg::registerCustomFormActions(
             static::getPromptUuidChangeOnSave()
         );
-    }
-
-    /**
-     * Register import prompt that shows after import
-     */
-    protected static function registerImportPrompt(): void
-    {
-        EditEgg::registerCustomHeaderActions(
-            HeaderActionPosition::Before,
-            static::getImportPromptAction()
-        );
-    }
-
-    /**
-     * Create the action to prompt UUID change after import
-     */
-    protected static function getImportPromptAction(): Action
-    {
-        return Action::make('import_uuid_prompt')
-            ->label(trans('egg-uuid-changer::messages.import_prompt_label'))
-            ->icon('tabler-alert-circle')
-            ->iconSize(IconSize::Large)
-            ->color('warning')
-            ->requiresConfirmation()
-            ->modalHeading(trans('egg-uuid-changer::messages.import_modal_heading'))
-            ->modalDescription(fn (Egg $record) => trans('egg-uuid-changer::messages.import_modal_description', ['name' => $record->name]))
-            ->form([
-                TextInput::make('new_uuid')
-                    ->label(trans('egg-uuid-changer::messages.form.new_uuid_label'))
-                    ->placeholder(trans('egg-uuid-changer::messages.form.new_uuid_placeholder'))
-                    ->helperText(trans('egg-uuid-changer::messages.form.new_uuid_helper'))
-                    ->maxLength(36)
-                    ->rules([
-                        function () {
-                            return function (string $attribute, $value, \Closure $fail) {
-                                if (empty($value)) {
-                                    return;
-                                }
-
-                                if (!Uuid::isValid($value)) {
-                                    $fail(trans('egg-uuid-changer::messages.validation.invalid_uuid'));
-                                }
-
-                                if (Egg::where('uuid', $value)->exists()) {
-                                    $fail(trans('egg-uuid-changer::messages.validation.duplicate_uuid'));
-                                }
-                            };
-                        },
-                    ]),
-            ])
-            ->action(function (array $data, Egg $record) {
-                static::changeUuid($record, $data['new_uuid'] ?? null);
-                session()->forget('egg_import_prompt');
-            })
-            ->visible(function (Egg $record) {
-                $importData = session('egg_import_prompt');
-                return $importData && $importData['id'] === $record->id;
-            });
     }
 
     /**
