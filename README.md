@@ -43,18 +43,6 @@ Open any egg in the admin panel. You'll see a "Change UUID" button at the top. C
 
 The page will automatically reload after the UUID change to show the updated value.
 
-## Configuration
-
-You can add these to your `.env` if needed:
-
-```env
-EGG_UUID_CHANGER_ENABLED=true
-EGG_UUID_CHANGER_ALLOW_DUPLICATE=false
-EGG_UUID_CHANGER_REQUIRE_CONFIRMATION=true
-```
-
-Default values work fine for most cases.
-
 ## Warnings
 
 Changing an egg's UUID after it's already in use can break things. Specifically:
