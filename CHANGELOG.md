@@ -5,10 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-11-02
+
+### Fixed
+- Fixed `Class "\goover\EggUuidChanger\EggUuidChangerPlugin" not found` and `Target class [cache] does not exist` on Pelican Panel pre-release versions (`1.0.0-rc.2` / `1.0.0-beta*`) by setting `"panel_version": null` and adding `"api_version": 1` in `plugin.json` (PHP's `version_compare` treats `1.0.0-rc.2` as lower than `^1.0.0`, which caused `PluginService::loadPlugins()` to skip PSR-4 autoloader registration)
+- Moved `EditEgg::registerCustomHeaderActions()` registration from `register()` to `boot()` so all Laravel service providers and Filament panel configurations are fully booted first
+
 ## [1.1.0] - 2026-11-02
 
 ### Added
-- Added Pelican Hub `update_url`, `url`, `panels` (`["admin"]`), and `panel_version` (`^1.0.0`) metadata to `plugin.json`
+- Added Pelican Hub `update_url`, `url`, `panels` (`["admin"]`), and `panel_version` metadata to `plugin.json`
 - Added tooltip to the header action button for compatibility with Pelican Panel's icon-only button style (`CustomizationKey::ButtonStyle`)
 - Added validation rule preventing redundant updates when entering the same UUID as the current Egg
 - Added automatic cache invalidation for `eggs.{old_uuid}.update` after changing an Egg's UUID
