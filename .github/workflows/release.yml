@@ -11,7 +11,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,36 +22,34 @@ jobs:
 
       - name: Create plugin ZIP
         run: |
-          # Create a temporary directory for the plugin
           mkdir -p build/egg-uuid-changer
-          
-          # Copy all files except .git, .github, and build directory
           rsync -av --exclude='.git' --exclude='.github' --exclude='build' . build/egg-uuid-changer/
-          
-          # Create the ZIP file
           cd build
-          zip -r ../egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip egg-uuid-changer
+          zip -r ../egg-uuid-changer.zip egg-uuid-changer
+          cp ../egg-uuid-changer.zip ../egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
+          files: |
+            egg-uuid-changer.zip
+            egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
           body: |
             ## Installation
-            
-            Download the ZIP file below and import it via:
+
+            Download `egg-uuid-changer.zip` below and import it via:
             **Admin Area → Plugins → Import**
-            
+
             Or install manually:
             ```bash
             cd /var/www/pelican/plugins
-            wget https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
-            unzip egg-uuid-changer-v${{ steps.get_version.outputs.VERSION }}.zip
+            wget https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/egg-uuid-changer.zip
+            unzip egg-uuid-changer.zip
             cd /var/www/pelican
-            php artisan plugin:enable egg-uuid-changer
+            php artisan p:plugin:install egg-uuid-changer
             php artisan optimize:clear
             ```
-            
+
             ## Changelog
             See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md) for details.
         env:

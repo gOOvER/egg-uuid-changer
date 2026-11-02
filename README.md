@@ -7,22 +7,22 @@
 
 # Egg UUID Changer
 
-Changes the UUID of existing eggs in Pelican Panel. That's it.
+Changes the UUID of existing Eggs in Pelican Panel. That's it.
 
 ## Why would you need this?
 
-Sometimes you need to match UUIDs between different panel installations, or you imported an egg and want to keep the original UUID. This plugin lets you do that without messing around in the database.
+Sometimes you need to match UUIDs between different panel installations, or you imported an Egg and want to restore or customize its UUID. This plugin lets you do that directly in the Admin Panel without touching the database manually.
 
-The plugin hooks into Filament's action system to add a button on the EditEgg page. All UUID changes are wrapped in database transactions for safety.
+The plugin hooks into Filament's header action system on the `EditEgg` page. All UUID changes are protected by authorization checks and wrapped in atomic database transactions.
 
 ## Installation
 
 ### Via Panel (recommended)
 
-1. Download or create a ZIP of this plugin
-2. Go to Admin Area → Plugins
-3. Click Import and select the ZIP file
-4. Done
+1. Download `egg-uuid-changer.zip` from the latest [GitHub Release](https://github.com/gOOvER/egg-uuid-changer/releases)
+2. Go to **Admin Area → Plugins**
+3. Click **Import** and select `egg-uuid-changer.zip`
+4. Enable the plugin
 
 ### Manual
 
@@ -30,33 +30,31 @@ The plugin hooks into Filament's action system to add a button on the EditEgg pa
 cd /var/www/pelican/plugins
 git clone https://github.com/gOOvER/egg-uuid-changer.git egg-uuid-changer
 cd /var/www/pelican
-php artisan plugin:enable egg-uuid-changer
+php artisan p:plugin:install egg-uuid-changer
 php artisan optimize:clear
 ```
 
 ## Usage
 
-Open any egg in the admin panel. You'll see a "Change UUID" button at the top. Click it to:
-- View the current UUID (you can copy it for backup)
-- Enter a new UUID or leave blank to generate one automatically
-- Confirm and the UUID will be updated immediately
-
-The page will automatically reload after the UUID change to show the updated value.
+Open any Egg in the Admin Panel (`Admin Area → Eggs → Edit`). You'll see a **Change UUID** button in the page header. Click it to:
+- View and copy the current UUID as a backup
+- Enter a custom UUID or leave the field blank to generate a new UUID v4 automatically
+- Confirm to update the Egg's UUID immediately
 
 ## Warnings
 
-Changing an egg's UUID after it's already in use can break things. Specifically:
+Changing an Egg's UUID after it is already in use can affect existing resources:
 
-- Wings might not recognize the egg anymore
-- Existing servers using this egg could have issues
-- Any external integrations referencing the UUID will break
+- Wings might need a server sync if the Egg UUID is referenced
+- External integrations or billing modules referencing the old UUID will need to be updated
+- Update checks cached under the old UUID are automatically cleared
 
-Only change UUIDs if you know what you're doing. Make a backup first.
+Only change UUIDs if you know what you're doing. Copy the old UUID as a backup first.
 
 ## Requirements
 
-- Pelican Panel 1.0.0-beta30+
-- PHP 8.3+
+- Pelican Panel `^1.0.0` (including `1.0.0-rc.2` / Filament v4)
+- PHP `8.3+`
 
 ## License
 

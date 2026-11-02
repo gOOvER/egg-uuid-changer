@@ -2,9 +2,16 @@
     "id": "egg-uuid-changer",
     "name": "Egg UUID Changer",
     "author": "gOOvER",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A plugin that allows changing the UUID of Eggs in Pelican Panel",
     "category": "plugin",
+    "url": "https://github.com/gOOvER/egg-uuid-changer",
+    "update_url": "https://hub.pelican.dev/plugins/egg-uuid-changer/update.json",
     "namespace": "goover\\EggUuidChanger",
-    "class": "EggUuidChangerPlugin"
+    "class": "EggUuidChangerPlugin",
+    "panels": [
+        "admin"
+    ],
+    "panel_version": "^1.0.0",
+    "composer_packages": null
 }
